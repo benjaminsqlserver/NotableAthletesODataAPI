@@ -1,0 +1,432 @@
+{
+  "info": {
+    "title": "ConData",
+    "x-type": "odata",
+    "x-connector": "mssql",
+    "x-connector-version": 16,
+    "x-infer-aspnet": false,
+    "x-infer-tables": true,
+    "x-infer-relations": true,
+    "x-infer-views": true,
+    "x-infer-sps": true
+  },
+  "definitions": {
+    "Athlete": {
+      "x-table": "dbo.Athletes",
+      "resource": "Athletes",
+      "required": [
+        "FirstName",
+        "LastName",
+        "CountryID"
+      ],
+      "properties": {
+        "AthleteID": {
+          "x-key": true,
+          "x-identity": true,
+          "x-nullable": false,
+          "x-precision": 19,
+          "type": "integer",
+          "format": "int64"
+        },
+        "FirstName": {
+          "x-nullable": false,
+          "type": "string",
+          "length": 50
+        },
+        "LastName": {
+          "x-nullable": false,
+          "type": "string",
+          "length": 50
+        },
+        "Country": {
+          "type": "object",
+          "$ref": "#/definitions/Country"
+        },
+        "CountryID": {
+          "x-nullable": false,
+          "x-precision": 10,
+          "type": "integer",
+          "x-foreignKey": {
+            "parentTable": "Countries",
+            "parentEntityType": "Country",
+            "type": "Country",
+            "principalKey": "CountryID",
+            "name": "Country",
+            "textProperty": "CountryName",
+            "navigationProperty": "Athletes"
+          }
+        }
+      }
+    },
+    "Country": {
+      "x-table": "dbo.Countries",
+      "resource": "Countries",
+      "required": [
+        "CountryName"
+      ],
+      "properties": {
+        "CountryID": {
+          "x-key": true,
+          "x-identity": true,
+          "x-nullable": false,
+          "x-precision": 10,
+          "type": "integer",
+          "x-navigation": [
+            {
+              "inversePropertyName": "Country",
+              "name": "Athletes",
+              "type": "Athlete"
+            }
+          ]
+        },
+        "CountryName": {
+          "x-nullable": false,
+          "type": "string",
+          "length": 50
+        },
+        "Athletes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Athlete"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/Athletes": {
+      "get": {
+        "operationId": "getAthletes",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$count",
+            "type": "boolean"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$select",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/Athlete"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createAthlete",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Athlete",
+            "schema": {
+              "$ref": "#/definitions/Athlete"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Athlete"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Countries": {
+      "get": {
+        "operationId": "getCountries",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$count",
+            "type": "boolean"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$select",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/Country"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createCountry",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Country",
+            "schema": {
+              "$ref": "#/definitions/Country"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Country"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Athletes({AthleteID})": {
+      "delete": {
+        "operationId": "deleteAthlete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "AthleteID",
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getAthleteByAthleteID",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "AthleteID",
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Athlete"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateAthlete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "AthleteID",
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "Athlete",
+            "schema": {
+              "$ref": "#/definitions/Athlete"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Countries({CountryID})": {
+      "delete": {
+        "operationId": "deleteCountry",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "CountryID",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getCountryByCountryID",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "CountryID",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Country"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateCountry",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "CountryID",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "Country",
+            "schema": {
+              "$ref": "#/definitions/Country"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "basePath": "/odata/ConData",
+  "host": "localhost:5001",
+  "schemes": [
+    "https"
+  ]
+}

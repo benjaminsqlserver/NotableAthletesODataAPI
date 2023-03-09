@@ -1,0 +1,31 @@
+{
+  "dataSources": [
+    "ConData"
+  ],
+  "generator": "@radzen/blazor-server",
+  "https": false,
+  "layouts": [
+    "Login",
+    "Main"
+  ],
+  "logo": "",
+  "name": "NotableAthletes",
+  "navigation": [
+    "Athletes",
+    "Countries"
+  ],
+  "pages": [
+    "Athletes",
+    "Add Athlete",
+    "Edit Athlete",
+    "Countries",
+    "Add Country",
+    "Edit Country"
+  ],
+  "serverLang": "cs",
+  "serverProject": true,
+  "serverVersion": "7",
+  "startPage": "Athletes",
+  "theme": "standard",
+  "wasm": true
+}
